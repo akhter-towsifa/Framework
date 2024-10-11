@@ -101,10 +101,10 @@ def addAllVariables(dfw, syst_name, isData, trigger_class, lepton_legs, isSignal
             dfw.Define(f"Jet_fromGenHbb", f"Take(GenJet_Hbb, Jet_genJetIdx, false)")
             dfw.DefineAndAppend("nJetFromGenHbb", "Jet_p4[Jet_fromGenHbb && Jet_bCand].size()")
             
-            for gen_idx in range(2):
-                dfw.DefineAndAppend(f"genLepton{gen_idx+1}_legType", f"static_cast<int>(genHttCandidate->leg_type[{gen_idx}])")
-                for var in [ 'pt', 'eta', 'phi', 'mass' ]:
-                    dfw.DefineAndAppend(f"genLepton{gen_idx+1}_{var}", f"static_cast<float>(genHttCandidate->leg_p4[{gen_idx}].{var}())")
+            # for gen_idx in range(2):
+            #     dfw.DefineAndAppend(f"genLepton{gen_idx+1}_legType", f"static_cast<int>(genHttCandidate->leg_type[{gen_idx}])")
+            #     for var in [ 'pt', 'eta', 'phi', 'mass' ]:
+            #         dfw.DefineAndAppend(f"genLepton{gen_idx+1}_{var}", f"static_cast<float>(genHttCandidate->leg_p4[{gen_idx}].{var}())")
 
     dfw.DefineAndAppend(f"nBJets", f"Jet_p4[Jet_bCand].size()")
     if global_params["storeExtraJets"]:
@@ -146,8 +146,8 @@ def addAllVariables(dfw, syst_name, isData, trigger_class, lepton_legs, isSignal
     if not isData:
         dfw.Define(f"FatJet_genJet_idx", f" FindMatching(FatJet_p4[FatJet_bbCand],GenJetAK8_p4,0.3)")
         fatjet_obs.extend(JetObservablesMC)
-        if isSignal:
-            dfw.DefineAndAppend("genchannelId","static_cast<int>(genHttCandidate->channel())")
+        # if isSignal:
+        #     dfw.DefineAndAppend("genchannelId","static_cast<int>(genHttCandidate->channel())")
     dfw.DefineAndAppend(f"SelectedFatJet_pt", f"v_ops::pt(FatJet_p4[FatJet_bbCand])")
     dfw.DefineAndAppend(f"SelectedFatJet_eta", f"v_ops::eta(FatJet_p4[FatJet_bbCand])")
     dfw.DefineAndAppend(f"SelectedFatJet_phi", f"v_ops::phi(FatJet_p4[FatJet_bbCand])")

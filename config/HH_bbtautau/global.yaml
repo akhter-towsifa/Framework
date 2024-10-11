@@ -1,7 +1,7 @@
 anaTupleDef: AnaProd/HH_bbtautau/anaTupleDef.py
 signal_types:
   - data
-  - HHnonRes
+  #- HHnonRes
   - DY
   #- GluGluToRadion
   #- GluGluToBulkGraviton
@@ -38,8 +38,8 @@ corrections: []
   # - pu
 deepTauVersion: 2p1
 channelSelection:
-  - eTau
-  - muTau
+  # - eTau
+  # - muTau
   # - eE
   # - eMu
   # - muMu
