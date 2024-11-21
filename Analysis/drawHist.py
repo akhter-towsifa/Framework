@@ -8,9 +8,10 @@ if __name__ == "__main__":
 
 
 import Common.Utilities as Utilities
-bTagWP = 2
+bTagWP = 0.43 #bTagWP = 2
 def defineSelectionRegions(df):
-    df = df.Define("nSelBtag", f"int(b1_idbtagDeepFlavB >= {bTagWP}) + int(b2_idbtagDeepFlavB >= {bTagWP})")
+    #df = df.Define("nSelBtag", f"int(b1_idbtagDeepFlavB >= {bTagWP}) + int(b2_idbtagDeepFlavB >= {bTagWP})")
+    df = df.Define("nSelBtag", f"int(b1_btagDeepFlavB >= {bTagWP} + int(b2_btagDeepFlavB >= {bTagWP})")
     df = df.Define("res1b", f"nSelBtag == 1")
     df = df.Define("res2b", f"nSelBtag == 2")
     df = df.Define("inclusive", f"return true;")

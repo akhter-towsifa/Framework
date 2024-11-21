@@ -136,13 +136,13 @@ if __name__ == "__main__":
     parser.add_argument('--wantData', required=False, type=bool, default=False)
     parser.add_argument('--wantQCD', required=False, type=bool, default=False)
     parser.add_argument('--uncSource', required=False, type=str,default='Central')
-    parser.add_argument('--year', required=False, type=str,default='2018')
+    parser.add_argument('--year', required=False, type=str,default='Run2_2018')
     parser.add_argument('--rebin', required=False, type=bool,default=False)
 
     args = parser.parse_args()
 
     page_cfg = os.path.join(os.environ['ANALYSIS_PATH'],"config/plot/cms_stacked.yaml")
-    page_cfg_custom = os.path.join(os.environ['ANALYSIS_PATH'],f'config/plot/Run2_{args.year}.yaml') # to be fixed!!
+    page_cfg_custom = os.path.join(os.environ['ANALYSIS_PATH'],f'config/plot/{args.year}.yaml') # to be fixed!!
     hist_cfg = os.path.join(os.environ['ANALYSIS_PATH'],"config/plot/histograms.yaml")
 
     #### config opening ####
@@ -215,6 +215,7 @@ if __name__ == "__main__":
                 all_samples_types[sample_cfg_dict[sample_name]['sampleType']].append(sample_name)
 
     #print(all_samples_types.keys())
+    #print("page_cfg", page_cfg, "   page_cfg_custom", page_cfg_custom, "   hist_cfg", hist_cfg_dict, "   inputs_cfg", inputs_cfg_dict)
     plotter = Plotter.Plotter(page_cfg=page_cfg, page_cfg_custom=page_cfg_custom, hist_cfg=hist_cfg_dict, inputs_cfg=inputs_cfg_dict)
 
 

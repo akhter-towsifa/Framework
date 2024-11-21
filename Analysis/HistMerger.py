@@ -190,6 +190,9 @@ if __name__ == "__main__":
             continue
             #raise RuntimeError(f"{inFileName} removed")
         #print(sample_name)
+        if 'samples_to_skip_hist' in global_cfg_dict.keys():
+            if sample_name in global_cfg_dict['samples_to_skip_hist']:
+                continue
         inFileRoot = ROOT.TFile.Open(inFileName, "READ")
         if inFileRoot.IsZombie():
             inFileRoot.Close()
@@ -234,7 +237,7 @@ if __name__ == "__main__":
             #if qcdRegion != 'OS_Iso': continue
             dirStruct = (channel,qcdRegion, cat)
             dir_name = '/'.join(dirStruct)
-            dir_ptr = mkdir(outFile,dir_name)
+            dir_ptr = Utilities.mkdir(outFile,dir_name)
             hist = all_histograms_1D[sample_type][key]
             #print(sample_type, key, hist.GetEntries())
             hist_name =  sample_type

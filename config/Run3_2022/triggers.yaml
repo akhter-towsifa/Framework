@@ -1,74 +1,3 @@
-#https://twiki.cern.ch/twiki/bin/viewauth/CMS/TauTrigger#Updates_for_2022_data_taking
-ditau:
-  channels:
-    - tauTau
-  path:
-    - HLT_DoubleMediumDeepTauPFTauHPS35_L2NN_eta2p1
-  legs:
-    - offline_obj:
-        type: Tau
-        cut: v_ops::pt(Tau_p4) > 40 && abs(v_ops::eta(Tau_p4)) < 2.1
-      online_obj:
-        cuts:
-          - cut: TrigObj_id==15 && (TrigObj_filterBits&8)!=0 && (TrigObj_filterBits&2048)!=0
-      doMatching: True
-    #- ref_leg: 0
-
-
-mutau:
-  channels:
-    - muTau
-  path:
-    - HLT_IsoMu20_eta2p1_LooseDeepTauPFTauHPS27_eta2p1_CrossL1
-  legs:
-    - offline_obj:
-        type: Muon
-        cut: v_ops::pt(Muon_p4) > 21 && abs(v_ops::eta(Muon_p4)) < 2.1
-      online_obj:
-        cut: TrigObj_id==13 && (TrigObj_filterBits&64)!=0 && TrigObj_pt>20
-      doMatching: True
-    - offline_obj:
-        type: Tau
-        cut: v_ops::pt(Tau_p4) > 25 && abs(v_ops::eta(Tau_p4)) < 2.1
-      online_obj:
-        cut: TrigObj_id==15 && (TrigObj_filterBits&8)!=0  && (TrigObj_filterBits&8192)!=0
-      doMatching: True
-
-
-etau:
-  channels:
-    - eTau
-  path:
-    - HLT_Ele24_eta2p1_WPTight_Gsf_LooseDeepTauPFTauHPS30_eta2p1_CrossL1
-  legs:
-    - offline_obj:
-        type: Electron
-        cut: v_ops::pt(Electron_p4) > 26 && abs(v_ops::eta(Electron_p4)) < 2.1
-      online_obj:
-        cut: TrigObj_id==11 && (TrigObj_filterBits&128)!=0 && TrigObj_pt>24
-      doMatching: True
-    - offline_obj:
-        type: Tau
-        cut: v_ops::pt(Tau_p4) > 25 && abs(v_ops::eta(Tau_p4)) < 2.1
-      online_obj:
-        cut:  TrigObj_id==15 && (TrigObj_filterBits&8)!=0 && (TrigObj_filterBits&4096)!=0
-      doMatching: True
-
-
-MET:
-    channels:
-      - tauTau
-      - muTau
-      - eTau
-    path:
-      - HLT_PFMETNoMu120_PFMHTNoMu120_IDTight
-    legs:
-      - offline_obj:
-          type: MET
-          cut: metnomu_pt > 150
-        doMatching: False
-
-
 singleIsoMu:
   channels:
     - muMu
@@ -82,7 +11,7 @@ singleIsoMu:
         cut:  v_ops::pt(Muon_p4) > 26
       online_obj:
         cut: TrigObj_id == 13 && (TrigObj_filterBits&8)!=0
-      doMatching: True
+      doMatching: False
 
 singleIsoMuHT:
   channels:
@@ -97,7 +26,7 @@ singleIsoMuHT:
         cut:  v_ops::pt(Muon_p4) > 17
       online_obj:
         cut: TrigObj_id == 13 && (TrigObj_filterBits&32)!=0
-      doMatching: True
+      doMatching: False
 singleIsoEleHT:
   channels:
     - eE
@@ -111,7 +40,7 @@ singleIsoEleHT:
         cut:  v_ops::pt(Electron_p4) > 17
       online_obj:
         cut: TrigObj_id == 11 && (TrigObj_filterBits&32)!=0
-      doMatching: True
+      doMatching: False
 singleEleWpTight:
   channels:
     - eMu
@@ -125,7 +54,7 @@ singleEleWpTight:
         cut: v_ops::pt(Electron_p4) > 32
       online_obj:
         cut: TrigObj_id == 11 && (TrigObj_filterBits&4)!=0
-      doMatching: True
+      doMatching: False
 
 diElec:
   channels:
@@ -139,13 +68,13 @@ diElec:
         cut: v_ops::pt(Electron_p4) > 25
       online_obj:
         cut: TrigObj_id == 11 &&  (TrigObj_filterBits&16)!=0
-      doMatching: True
+      doMatching: False
     - offline_obj:
         type: Electron
         cut: v_ops::pt(Electron_p4) > 14
       online_obj:
         cut: TrigObj_id == 11 && (TrigObj_filterBits&32)!=0
-      doMatching: True
+      doMatching: False
 
 diMuon:
   channels:
@@ -159,7 +88,7 @@ diMuon:
         cut:  v_ops::pt(Muon_p4) > 19
       online_obj:
         cut: TrigObj_id == 13 && (TrigObj_filterBits&16)!=0
-      doMatching: True
+      doMatching: False
 
 EMu:
   channels:
@@ -174,13 +103,13 @@ EMu:
         cut: v_ops::pt(Muon_p4) > 10
       online_obj:
         cut: TrigObj_id == 13 && (TrigObj_filterBits&32)!=0
-      doMatching: True
+      doMatching: False
     - offline_obj:
         type: Electron
         cut: v_ops::pt(Electron_p4) > 25
       online_obj:
         cut:  TrigObj_id==11 && (TrigObj_filterBits&64)!=0
-      doMatching: True
+      doMatching: False
 MuE:
   channels:
     - e
@@ -194,10 +123,10 @@ MuE:
         cut: v_ops::pt(Muon_p4) > 25
       online_obj:
         cut: TrigObj_id == 13 & (TrigObj_filterBits&32)!=0
-      doMatching: True
+      doMatching: False
     - offline_obj:
         type: Electron
         cut: v_ops::pt(Electron_p4) > 14
       online_obj:
         cut:  TrigObj_id==11 && (TrigObj_filterBits&64)!=0
-      doMatching: True
+      doMatching: False
