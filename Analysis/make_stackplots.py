@@ -3,7 +3,7 @@ import os
 
 indir = "/eos/user/t/toakhter/HH_bbtautau_Run3/histograms/HLT/Run3_2022/merged/"
 
-varnames = ["PV_npvs"]#["lep1_pt", "lep1_eta", "lep2_pt", "lep2_eta", "bjet1_btagPNetB", "bjet2_btagPNetB"]
+varnames = ["tau1_pt"]#["PV_npvs"]#["lep1_pt", "lep1_eta", "lep2_pt", "lep2_eta", "bjet1_btagPNetB", "bjet2_btagPNetB"]
 channellist = ["tauTau"]#["e", "eE", "eMu", "mu", "muMu", "tauTau"]
 
 for var in varnames:

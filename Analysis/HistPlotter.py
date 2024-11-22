@@ -2,6 +2,7 @@ import ROOT
 import sys
 import os
 import array
+print("root version ROOT.__version__ ", ROOT.__version__)
 
 from RunKit.run_tools import ps_call
 if __name__ == "__main__":
@@ -12,6 +13,7 @@ from Analysis.HistHelper import *
 from Analysis.HistMerger import *
 
 def CreateNamesDict(histNamesDict, all_sample_types, uncName, sample_cfg_dict,global_cfg_dict):
+    print("~Hi")
     signals = list(global_cfg_dict['signal_types'])
     for sample_type in all_sample_types.keys():
         for sample_name in all_sample_types[sample_type]:
@@ -24,6 +26,7 @@ def CreateNamesDict(histNamesDict, all_sample_types, uncName, sample_cfg_dict,gl
                 if not onlyCentral:
                     histName = f"{sample_namehist}_{uncName}{scale}"
                 histNamesDict[histName] = histKey
+                print("hi~")
 
 
 def RebinHisto(hist_initial, new_binning, verbose=False):
@@ -62,15 +65,19 @@ def getNewBins(bins):
 
 def GetHistograms(inFile, channel, qcdregion, category, uncSource, histNamesDict,all_histlist, wantData):
     inFile = ROOT.TFile(inFile,"READ")
+    print("inFile~")
     dir_0 = inFile.Get(channel)
+    print("dir_0", dir_0)
     dir_0p1 = dir_0.Get(qcdregion)
+    print("dir_0p1", dir_0p1)
     dir_1 = dir_0p1.Get(category)
+    print("dir_1", dir_1)
     for key in dir_1.GetListOfKeys():
         obj = key.ReadObj()
         if obj.IsA().InheritsFrom(ROOT.TH1.Class()):
             obj.SetDirectory(0)
             key_name = key.GetName()
-            #print(key_name)
+            print("key_name", key_name)
             if key_name not in histNamesDict.keys(): continue
             #print(key_name)
             sample, uncName, scale = histNamesDict[key_name]
