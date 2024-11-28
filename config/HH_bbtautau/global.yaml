@@ -61,8 +61,12 @@ deepTauYears:
 
 
 channels_to_consider:
-  # - muTau
-  # - muMu
+  - tauTau
+  - eTau
+  - muTau
+  - eE
+  - eMu
+  - muMu
   - tauTau
 gen_channels:
   eTau:
@@ -87,20 +91,20 @@ channelDefinition:
 triggers:
   eTau:  HLT_singleEle || HLT_etau || HLT_singleTau || HLT_MET
   muTau: HLT_singleMu || HLT_mutau || HLT_singleTau || HLT_MET
-  tauTau: HLT_ditau #|| HLT_singleTau || HLT_MET
+  tauTau: HLT_ditau || HLT_singleTau || HLT_MET
   eE: HLT_singleEle || HLT_MET
   eMu: HLT_singleEle || HLT_singleMu || HLT_MET
   muMu: HLT_singleMu || HLT_MET
 
-# hist_triggers:
-#   eTau:  ((HLT_singleEle && SingleEle_region) || (HLT_singleTau && SingleTau_region) || (HLT_MET && MET_region ))
-#   #eTau:  (((HLT_singleEle || HLT_etau ) && (SingleEle_region || CrossEleTau_region) )|| (HLT_singleTau && SingleTau_region)  || (HLT_MET && MET_region ))
-#   muTau: ((HLT_singleMu && SingleMu_region) || (HLT_singleTau && SingleTau_region) || (HLT_MET && MET_region ))
-#   #muTau: (((HLT_singleMu || HLT_mutau ) && (SingleMu_region || CrossMuTau_region) ) || (HLT_singleTau && SingleTau_region)  || (HLT_MET && MET_region ))
-#   tauTau: ((HLT_ditau && Legacy_region) || (HLT_singleTau && SingleTau_region && !Legacy_region)  || (HLT_MET && MET_region ) )
-#   eE: (HLT_singleEle && SingleEle_region)
-#   eMu: ((HLT_singleEle && SingleEle_region) || (HLT_singleMu && SingleMu_region))
-#   muMu: (HLT_singleMu && SingleMu_region)
+hist_triggers:
+  eTau:  ((HLT_singleEle && SingleEle_region) || (HLT_singleTau && SingleTau_region) || (HLT_MET && MET_region ))
+  #eTau:  (((HLT_singleEle || HLT_etau ) && (SingleEle_region || CrossEleTau_region) )|| (HLT_singleTau && SingleTau_region)  || (HLT_MET && MET_region ))
+  muTau: ((HLT_singleMu && SingleMu_region) || (HLT_singleTau && SingleTau_region) || (HLT_MET && MET_region ))
+  #muTau: (((HLT_singleMu || HLT_mutau ) && (SingleMu_region || CrossMuTau_region) ) || (HLT_singleTau && SingleTau_region)  || (HLT_MET && MET_region ))
+  tauTau: ((HLT_ditau && Legacy_region) || (HLT_singleTau && SingleTau_region && !Legacy_region)  || (HLT_MET && MET_region ) )
+  eE: (HLT_singleEle && SingleEle_region)
+  eMu: ((HLT_singleEle && SingleEle_region) || (HLT_singleMu && SingleMu_region))
+  muMu: (HLT_singleMu && SingleMu_region)
 
 application_regions:
   HLT_singleMu:

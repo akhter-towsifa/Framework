@@ -2,6 +2,7 @@ GLOBAL:
   sampleSelection:
     - drop ^.*
     - keep ^TT.*
+    - keep ^ttH.*
     - keep ^ST.*
     - keep DYto2L_M_10to50_amcatnloFXFX
     - keep DYto2L_M_50_amcatnloFXFX
@@ -9,9 +10,14 @@ GLOBAL:
     - keep WW
     - keep WZ
     - keep ZZ
+    - keep WWW_4F
+    - keep WWZ_4F
+    - keep WZZ
+    - keep ZZZ
     - keep ^Muon_.*
     - keep ^SingleMuon_.*
   use_stitching: true
+  triggerFile: config/HH_bbtautau/Run3_2022/triggers.yaml
 
 ############## Signals ##############
 GluGlutoRadiontoHHto2B2Tau_M_250:
