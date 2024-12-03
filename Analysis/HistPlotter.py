@@ -155,6 +155,7 @@ if __name__ == "__main__":
 
     page_cfg = os.path.join(os.environ['ANALYSIS_PATH'],"config", args.analysis, "plot/cms_stacked.yaml")
     page_cfg_custom = os.path.join(os.environ['ANALYSIS_PATH'],f'config', args.analysis, f'plot/{args.year}.yaml') # to be fixed!!
+    print(f"page_cfg_custom, {page_cfg_custom}")
     hist_cfg = os.path.join(os.environ['ANALYSIS_PATH'],"config", args.analysis, "plot/histograms.yaml")
 
     #### config opening ####

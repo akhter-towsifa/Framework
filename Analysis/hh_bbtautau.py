@@ -8,6 +8,11 @@ from Common.Utilities import *
 
 
 WorkingPointsParticleNet = {
+        "Run3_2022":{
+            "Loose":0.0583,#these are placeholders from /cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/BTV/2022_Summer22/btagging.json.gz
+            "Medium":0.3086,
+            "Tight":0.7183
+        },
         "Run2_2018":{
             "Loose":0.9172,
             "Medium":0.9734,
@@ -30,6 +35,11 @@ WorkingPointsParticleNet = {
         },
     }
 WorkingPointsDeepFlav = {
+        "Run3_2022":{
+            "Loose":0.047,#these are placeholders from /cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/BTV/2022_Summer22/btagging.json.gz
+            "Medium":0.245,
+            "Tight":0.6734
+        },
         "Run2_2018":{
             "Loose":0.049,
             "Medium":0.2783,
@@ -58,7 +68,7 @@ def createKeyFilterDict(global_cfg_dict, year):
     filter_str = ""
     channels_to_consider = global_cfg_dict['channels_to_consider']
     qcd_regions_to_consider = global_cfg_dict['QCDRegions']
-    categories_to_consider = global_cfg_dict["categories"] + global_cfg_dict["boosted_categories"]
+    categories_to_consider = global_cfg_dict["categories"] #+ global_cfg_dict["boosted_categories"]
     boosted_categories = global_cfg_dict["boosted_categories"]
     triggers_dict = global_cfg_dict['hist_triggers']
     mass_cut_limits = global_cfg_dict['mass_cut_limits']
@@ -71,8 +81,8 @@ def createKeyFilterDict(global_cfg_dict, year):
             for cat in categories_to_consider:
                 filter_base = f" ({ch} && {triggers} && {reg} && {cat})"
                 filter_str = f"(" + filter_base
-                if cat not in boosted_categories and not (cat.startswith("baseline")):
-                    filter_str += "&& (b1_pt>0 && b2_pt>0)"
+                # if cat not in boosted_categories and not (cat.startswith("baseline")):
+                #     filter_str += "&& (b1_pt>0 && b2_pt>0)"
                 filter_str += ")"
                 key = (ch, reg, cat)
                 reg_dict[key] = filter_str
@@ -87,13 +97,13 @@ def GetBTagWeight(global_cfg_dict,cat,applyBtag=False):
         if global_cfg_dict['btag_wps'][cat]!='' : btag_weight = f"weight_bTagSF_{btag_wps[cat]}_Central"
     else:
         if cat not in global_cfg_dict['boosted_categories'] and not cat.startswith("baseline"):
-            btagshape_weight = "weight_bTagShape_Central"
+            btagshape_weight = btagshape_weight #"weight_bTagShape_Central"
     return f'{btag_weight}*{btagshape_weight}'
 
 
 
 def GetWeight(channel, cat, boosted_categories):
-    weights_to_apply = ["weight_MC_Lumi_pu", "weight_L1PreFiring_Central"]#,"weight_L1PreFiring_ECAL_Central", "weight_L1PreFiring_Muon_Central"]
+    weights_to_apply = ["weight_MC_Lumi_pu"]#, "weight_L1PreFiring_Central","weight_L1PreFiring_ECAL_Central", "weight_L1PreFiring_Muon_Central"]
     trg_weights_dict = {
         'eTau':["weight_HLT_eTau", "weight_HLT_singleTau", "weight_HLT_MET"],
         'muTau':["weight_HLT_muTau", "weight_HLT_singleTau", "weight_HLT_MET"],
@@ -112,40 +122,40 @@ def GetWeight(channel, cat, boosted_categories):
         'eE':["weight_tau1_EleSF_wp80iso_EleIDCentral","weight_tau2_EleSF_wp80noiso_EleIDCentral"]
         }
 
-    weights_to_apply.extend(ID_weights_dict[channel])
-    weights_to_apply.extend(trg_weights_dict[channel])
-    if cat not in boosted_categories:
-         weights_to_apply.extend(["weight_Jet_PUJetID_Central_b1_2", "weight_Jet_PUJetID_Central_b2_2"])
-    else:
-        weights_to_apply.extend(["weight_pNet_Central"])
+    # weights_to_apply.extend(ID_weights_dict[channel])
+    # weights_to_apply.extend(trg_weights_dict[channel])
+    # if cat not in boosted_categories:
+    #      weights_to_apply.extend(["weight_Jet_PUJetID_Central_b1_2", "weight_Jet_PUJetID_Central_b2_2"])
+    # else:
+    #     weights_to_apply.extend(["weight_pNet_Central"])
     total_weight = '*'.join(weights_to_apply)
     return total_weight
 
 class DataFrameBuilderForHistograms(DataFrameBuilderBase):
 
-    def defineBoostedVariables(self): # needs p4 def
-        FatJetObservables = self.config['FatJetObservables']
-        particleNet_MD_JetTagger = "SelectedFatJet_particleNetMD_Xbb/(SelectedFatJet_particleNetMD_QCD + SelectedFatJet_particleNetMD_Xbb)"
-        if "SelectedFatJet_particleNetMD_Xbb" not in self.df.GetColumnNames() and "SelectedFatJet_particleNetLegacy_Xbb" in self.df.GetColumnNames():
-            particleNet_MD_JetTagger = "SelectedFatJet_particleNetLegacy_Xbb/ (SelectedFatJet_particleNetLegacy_Xbb + SelectedFatJet_particleNetLegacy_QCD)"
-        particleNet_HbbvsQCD = 'SelectedFatJet_particleNet_HbbvsQCD' if 'SelectedFatJet_particleNet_HbbvsQCD' in self.df.GetColumnNames() else 'SelectedFatJet_particleNetWithMass_HbbvsQCD'
-        self.df = self.df.Define("SelectedFatJet_particleNet_MD_JetTagger", particleNet_MD_JetTagger)
-        self.df = self.df.Define("fatJet_presel", f"SelectedFatJet_pt>250")
-        self.df = self.df.Define("fatJet_sel"," RemoveOverlaps(SelectedFatJet_p4, fatJet_presel, {tau1_p4, tau2_p4}, 0.8)")
+    # def defineBoostedVariables(self): # needs p4 def
+    #     FatJetObservables = self.config['FatJetObservables']
+    #     particleNet_MD_JetTagger = "SelectedFatJet_particleNetMD_Xbb/(SelectedFatJet_particleNetMD_QCD + SelectedFatJet_particleNetMD_Xbb)"
+    #     if "SelectedFatJet_particleNetMD_Xbb" not in self.df.GetColumnNames() and "SelectedFatJet_particleNetLegacy_Xbb" in self.df.GetColumnNames():
+    #         particleNet_MD_JetTagger = "SelectedFatJet_particleNetLegacy_Xbb/ (SelectedFatJet_particleNetLegacy_Xbb + SelectedFatJet_particleNetLegacy_QCD)"
+    #     particleNet_HbbvsQCD = 'SelectedFatJet_particleNet_HbbvsQCD' if 'SelectedFatJet_particleNet_HbbvsQCD' in self.df.GetColumnNames() else 'SelectedFatJet_particleNetWithMass_HbbvsQCD'
+    #     self.df = self.df.Define("SelectedFatJet_particleNet_MD_JetTagger", particleNet_MD_JetTagger)
+    #     self.df = self.df.Define("fatJet_presel", f"SelectedFatJet_pt>250")
+    #     self.df = self.df.Define("fatJet_sel"," RemoveOverlaps(SelectedFatJet_p4, fatJet_presel, {tau1_p4, tau2_p4}, 0.8)")
 
-        self.df = self.df.Define("SelectedFatJet_size_boosted","SelectedFatJet_p4[fatJet_sel].size()")
-        # def the correct discriminator
-        self.df = self.df.Define(f"SelectedFatJet_particleNet_MD_JetTagger_boosted_vec",f"SelectedFatJet_particleNet_MD_JetTagger[fatJet_sel]")
-        self.df = self.df.Define("SelectedFatJet_idxUnordered", "CreateIndexes(SelectedFatJet_p4[fatJet_sel].size())")
-        self.df = self.df.Define("SelectedFatJet_idxOrdered", f"ReorderObjects(SelectedFatJet_particleNet_MD_JetTagger_boosted_vec, SelectedFatJet_idxUnordered)")
-        for fatJetVar in FatJetObservables:
-            if f'SelectedFatJet_{fatJetVar}' in self.df.GetColumnNames():
-                if f'SelectedFatJet_{fatJetVar}_boosted_vec' not in self.df.GetColumnNames():
-                    self.df = self.df.Define(f'SelectedFatJet_{fatJetVar}_boosted_vec',f""" SelectedFatJet_{fatJetVar}[fatJet_sel];""")
-                self.df = self.df.Define(f'SelectedFatJet_{fatJetVar}_boosted',f"""
-                                    SelectedFatJet_{fatJetVar}_boosted_vec[SelectedFatJet_idxOrdered[0]];
-                                   """)
-                #print(fatJetVar)
+    #     self.df = self.df.Define("SelectedFatJet_size_boosted","SelectedFatJet_p4[fatJet_sel].size()")
+    #     # def the correct discriminator
+    #     self.df = self.df.Define(f"SelectedFatJet_particleNet_MD_JetTagger_boosted_vec",f"SelectedFatJet_particleNet_MD_JetTagger[fatJet_sel]")
+    #     self.df = self.df.Define("SelectedFatJet_idxUnordered", "CreateIndexes(SelectedFatJet_p4[fatJet_sel].size())")
+    #     self.df = self.df.Define("SelectedFatJet_idxOrdered", f"ReorderObjects(SelectedFatJet_particleNet_MD_JetTagger_boosted_vec, SelectedFatJet_idxUnordered)")
+    #     for fatJetVar in FatJetObservables:
+    #         if f'SelectedFatJet_{fatJetVar}' in self.df.GetColumnNames():
+    #             if f'SelectedFatJet_{fatJetVar}_boosted_vec' not in self.df.GetColumnNames():
+    #                 self.df = self.df.Define(f'SelectedFatJet_{fatJetVar}_boosted_vec',f""" SelectedFatJet_{fatJetVar}[fatJet_sel];""")
+    #             self.df = self.df.Define(f'SelectedFatJet_{fatJetVar}_boosted',f"""
+    #                                 SelectedFatJet_{fatJetVar}_boosted_vec[SelectedFatJet_idxOrdered[0]];
+    #                                """)
+    #             #print(fatJetVar)
 
     def defineTriggers(self):
         for ch in self.config['channelSelection']:
@@ -164,15 +174,16 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
 
     def defineApplicationRegions(self):
         for ch in self.config['channels_to_consider']:
-            for trg in self.config['triggers'][ch].split(' || '):
-                if trg not in self.df.GetColumnNames():
-                    print(f"{trg} not present in colNames")
-                    self.df = self.df.Define(trg, "1")
+            for trg in self.config['triggers'][ch]:#.split(' || '):
+                #print(self.df.GetColumnNames())
+                if 'HLT_'+trg not in self.df.GetColumnNames():
+                    print(f"{'HLT_'+trg} not present in colNames")
+                    self.df = self.df.Define('HLT_'+trg, "1")
         singleTau_th_dict = self.config['singleTau_th']
         singleMu_th_dict = self.config['singleMu_th']
         singleEle_th_dict = self.config['singleEle_th']
-        legacy_region_definition= "( ( eTau && (SingleEle_region  || CrossEleTau_region) ) || ( muTau && (SingleMu_region  || CrossMuTau_region) ) || ( tauTau && ( diTau_region ) ) || ( eE && (SingleEle_region)) || (eMu && ( SingleEle_region || SingleMu_region ) ) || (muMu && (SingleMu_region)) )"
-        #legacy_region_definition= "( ( eTau && (SingleEle_region ) ) || ( muTau && (SingleMu_region ) ) || ( tauTau && ( diTau_region ) ) || ( eE && (SingleEle_region)) || (eMu && ( SingleEle_region || SingleMu_region ) ) || (muMu && (SingleMu_region)) )"
+        #legacy_region_definition= "( ( eTau && (SingleEle_region  || CrossEleTau_region) ) || ( muTau && (SingleMu_region  || CrossMuTau_region) ) || ( tauTau && ( diTau_region ) ) || ( eE && (SingleEle_region)) || (eMu && ( SingleEle_region || SingleMu_region ) ) || (muMu && (SingleMu_region)) )"
+        legacy_region_definition= "( ( eTau && (SingleEle_region ) ) || ( muTau && (SingleMu_region ) ) || ( tauTau && ( diTau_region ) ) || ( eE && (SingleEle_region)) || (eMu && ( SingleEle_region || SingleMu_region ) ) || (muMu && (SingleMu_region)) )"
         for reg_name, reg_exp in self.config['application_regions'].items():
             self.df = self.df.Define(reg_name, reg_exp.format(tau_th=singleTau_th_dict[self.period], ele_th=singleEle_th_dict[self.period], mu_th=singleMu_th_dict[self.period]))
         self.df = self.df.Define("Legacy_region", legacy_region_definition)
@@ -229,11 +240,18 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
 
 
     def defineCategories(self): # needs lot of stuff --> at the end
-        self.df = self.df.Define("nSelBtag", f"int(b1_btagDeepFlavB >{self.bTagWP}) + int(b2_btagDeepFlavB >{self.bTagWP})")
-        for category_to_def in self.config['category_definition'].keys():
-            category_name = category_to_def
-            #print(self.config['category_definition'][category_to_def].format(pNetWP=self.pNetWP, region=self.region))
-            self.df = self.df.Define(category_to_def, self.config['category_definition'][category_to_def].format(pNetWP=self.pNetWP, region=self.region))
+        # self.df = self.df.Define("nSelBtag", f"int(b1_btagDeepFlavB >{self.bTagWP}) + int(b2_btagDeepFlavB >{self.bTagWP})")
+        # for category_to_def in self.config['category_definition'].keys():
+        #     category_name = category_to_def
+        #     #print(self.config['category_definition'][category_to_def].format(pNetWP=self.pNetWP, region=self.region))
+        #     self.df = self.df.Define(category_to_def, self.config['category_definition'][category_to_def].format(pNetWP=self.pNetWP, region=self.region))
+        self.df = self.df.Define("nSelBtag", f"int(b1_btagDeepFlavB >= {self.bTagWP}) + int(b2_btagDeepFlavB >= {self.bTagWP})")
+        self.df = self.df.Define("boosted", "SelectedFatJet_pt.size() > 0")#"SelectedFatJet_p4[fatJet_sel].size()>0")
+        self.df = self.df.Define("res1b", f"!boosted && nSelBtag == 1")
+        self.df = self.df.Define("res2b", f"!boosted && nSelBtag == 2")
+        self.df = self.df.Define("inclusive", f"!boosted")
+        self.df = self.df.Define("btag_shape", f"!boosted")
+        self.df = self.df.Define("baseline",f"return true;")
 
     def defineChannels(self):
         for channel in self.config['all_channels']:
@@ -342,26 +360,26 @@ class DataFrameBuilderForHistograms(DataFrameBuilderBase):
 
 def PrepareDfForHistograms(dfForHistograms):
     # if dfForHistograms.isCentral:
-    dfForHistograms.df = defineAllP4(dfForHistograms.df)
-    dfForHistograms.defineBoostedVariables()
-    dfForHistograms.redefinePUJetIDWeights()
-    dfForHistograms.df = createInvMass(dfForHistograms.df)
+    #dfForHistograms.df = defineAllP4(dfForHistograms.df)
+    #dfForHistograms.defineBoostedVariables()
+    #dfForHistograms.redefinePUJetIDWeights()
+    #dfForHistograms.df = createInvMass(dfForHistograms.df)
     dfForHistograms.defineChannels()
     dfForHistograms.defineLeptonPreselection()
     dfForHistograms.defineApplicationRegions()
     if not dfForHistograms.isData:
-        dfForHistograms.definePNetSFs()
-        dfForHistograms.GetTauIDTotalWeight()
-        defineTriggerWeights(dfForHistograms)
+        #dfForHistograms.definePNetSFs()
+        #dfForHistograms.GetTauIDTotalWeight()
+        #defineTriggerWeights(dfForHistograms)
         if dfForHistograms.wantTriggerSFErrors and dfForHistograms.isCentral:
             defineTriggerWeightsErrors(dfForHistograms)
-        defineTotalTriggerWeight(dfForHistograms)
+        #defineTotalTriggerWeight(dfForHistograms)
     #print(dfForHistograms.df.GetColumnNames())
-    dfForHistograms.defineCRs()
+    #dfForHistograms.defineCRs()
     dfForHistograms.defineCategories()
     dfForHistograms.defineTriggers()
-    dfForHistograms.redefineWeights()
-    dfForHistograms.df = createInvMass(dfForHistograms.df)
+    #dfForHistograms.redefineWeights()
+    #dfForHistograms.df = createInvMass(dfForHistograms.df)
     dfForHistograms.defineQCDRegions()
     # dfForHistograms.addNewCols()
     return dfForHistograms

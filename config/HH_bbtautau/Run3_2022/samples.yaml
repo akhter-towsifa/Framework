@@ -16,7 +16,7 @@ GLOBAL:
     - keep ZZZ
     - keep ^Muon_.*
     - keep ^SingleMuon_.*
-  use_stitching: true
+  use_stitching: false
   triggerFile: config/HH_bbtautau/Run3_2022/triggers.yaml
 
 ############## Signals ##############

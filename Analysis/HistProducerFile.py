@@ -70,7 +70,7 @@ def GetHistogramDictFromDataframes(var, all_dataframes, key_2 , key_filter_dict,
     boosted_categories = global_cfg_dict['boosted_categories']
     categories = global_cfg_dict['categories']
     boosted_variables = global_cfg_dict['var_only_boosted']
-    all_categories = categories + boosted_categories
+    all_categories = categories #+ boosted_categories
     if args.var in boosted_variables:
         all_categories = boosted_categories
     if (args.var.startswith('b1') or args.var.startswith('b2')):
@@ -101,6 +101,8 @@ def GetHistogramDictFromDataframes(var, all_dataframes, key_2 , key_filter_dict,
 
         for dataframe in dataframes:
             if furtherCut != '' : key_cut += f' && {furtherCut}'
+            #print(f"key cut {key_cut}")
+            #print("display dataframe as numpy", dataframe.AsNumpy())
             dataframe_new = dataframe.Filter(key_cut)
 
             #print(dataframe_new.Count().GetValue())
@@ -227,7 +229,7 @@ if __name__ == "__main__":
     categories = global_cfg_dict['categories']
     boosted_categories = global_cfg_dict['boosted_categories']
     boosted_variables = global_cfg_dict['var_only_boosted']
-    all_categories = categories + boosted_categories
+    all_categories = categories #+ boosted_categories
     if args.var in boosted_variables:
         all_categories = boosted_categories
     if (args.var.startswith('b1') or args.var.startswith('b2')):
@@ -247,7 +249,6 @@ if __name__ == "__main__":
     all_histograms = {}
     compute_rel_weights_not_data = args.compute_rel_weights and args.dataset!='data'
     if not create_new_hist:
-        args.deepTauVersion = "PlaceHolder"
         #Put kwargset into config later
         kwargset = {}
         if analysis_import == "Analysis.hh_bbww":
