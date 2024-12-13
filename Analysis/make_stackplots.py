@@ -1,8 +1,8 @@
 import os
 
 era = "Run3_2022"
-ver = "plot_lumi"
-plotdir = "plots/"
+ver = "wo_pu"
+plotdir = "/eos/user/t/toakhter/HH_bbtautau_Run3/histograms/plots_wo_pu/"
 indir = f"/eos/user/t/toakhter/HH_bbtautau_Run3/histograms/{ver}/{era}/merged/"
 
 varnames = ["PV_npvs", "Rho_fixedGridRhoAll", "tau1_pt", "tau2_pt"]#["lep1_pt", "lep1_eta", "lep2_pt", "lep2_eta", "bjet1_btagPNetB", "bjet2_btagPNetB"]
