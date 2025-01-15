@@ -44,7 +44,7 @@ channelSelection:
     - muMu
 
 met_type: "PFMET"
-deepTauVersion: 2p1
+deepTauVersion: 2p5
 region: SR
 channels: ""
 QCDRegions:
