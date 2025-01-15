@@ -1,8 +1,8 @@
 anaTupleDef: AnaProd/HH_bbtautau/anaTupleDef.py
 analysis_import: Analysis.hh_bbtautau
-signal_types:
-  - GluGluToRadion
-  - GluGluToBulkGraviton
+signal_types: []
+  # - GluGluToRadion
+  # - GluGluToBulkGraviton
   #- VBFToRadion
   #- VBFToBulkGraviton
 genuineTau_SFtype:
@@ -25,14 +25,14 @@ deepTauWPs:
 corrections:
   - tauID
   - tauES
-  - JEC
-  - JER
-  - trg
-  - btagWP
-  - btagShape
-  - mu
-  - ele
-  - puJetID
+  # - JEC
+  # - JER
+  # - trg
+  # - btagWP
+  # - btagShape
+  # - mu
+  # - ele
+  # - puJetID
   - pu
 
 channelSelection:
@@ -43,7 +43,7 @@ channelSelection:
     - eMu
     - muMu
 
-met_type: "MET"
+met_type: "PFMET"
 deepTauVersion: 2p1
 region: SR
 channels: ""
@@ -57,18 +57,18 @@ boosted_categories:
   # - boosted_cat3
   # - boosted_masswindow
   # - boosted_cat2_masswindow
-  - boosted_cat3_masswindow
+  # - boosted_cat3_masswindow
 categories:
   - inclusive
   - btag_shape
   - baseline
-  - boosted_baseline
-  - boosted_baseline_cat3
+  # - boosted_baseline
+  # - boosted_baseline_cat3
   #- boosted_baseline_masswindow
   #- boosted_baseline_cat3_masswindow
   # - res0b_inclusive
-  # - res1b_inclusive
-  # - res2b_inclusive
+  - res1b # - res1b_inclusive
+  - res2b # - res2b_inclusive
   # - boosted
   # - res0b_cat2
   # - res1b_cat2
@@ -76,18 +76,18 @@ categories:
   # - res2b_cat3
   # - res1b_cat3
   # - res0b_cat3
-  - inclusive_masswindow
-  - btag_shape_masswindow
-  - baseline_masswindow
+  # - inclusive_masswindow
+  # - btag_shape_masswindow
+  # - baseline_masswindow
   # - res0b_inclusive_masswindow
   # - res1b_inclusive_masswindow
   # - res2b_inclusive_masswindow
   # - res0b_cat2_masswindow
   # - res1b_cat2_masswindow
   # - res2b_cat2_masswindow
-  - res2b_cat3_masswindow
-  - res1b_cat3_masswindow
-  - res0b_cat3_masswindow
+  # - res2b_cat3_masswindow
+  # - res1b_cat3_masswindow
+  # - res0b_cat3_masswindow
 
 
 storeExtraJets: False
@@ -125,12 +125,12 @@ channelDefinition:
 
 
 triggers:
-  eTau: [ singleEle, etau, singleTau, MET]
-  muTau: [singleMu, mutau, singleTau, MET]
-  tauTau: [ditau, singleTau, MET]
-  eE: [singleEle, MET]
-  eMu: [singleEle, singleMu, MET]
-  muMu: [singleMu, MET]
+  eTau: [singleEleWpTight] #, etau, singleTau, MET]
+  muTau: [singleIsoMu] #, mutau, singleTau, MET]
+  tauTau: [ditau] #, singleTau, MET]
+  eE: [singleEleWpTight] #, diElec, MET]
+  eMu: [singleEleWpTight, singleIsoMu] #, MET]
+  muMu: [singleIsoMu] #, MET]
 
 hist_triggers:
   eTau:
