@@ -16,12 +16,12 @@ GLOBAL:
     - keep ZZZ
     - keep ^Muon_.*
     - keep ^SingleMuon_.*
-    - keep DoubleMuon_.*
+    - keep ^DoubleMuon_.*
     - keep ^Tau_.*
-    - keep EGamma_.*
-    - keep MuonEG_.*
-    - keep Jet.*
-    - keep MET_.*
+    - keep ^EGamma_.*
+    - keep ^MuonEG_.*
+    - keep ^Jet.*
+    - keep ^MET_.*
   use_stitching: false
   triggerFile: config/HH_bbtautau/Run3_2022/triggers.yaml
 ############## Signals ##############
