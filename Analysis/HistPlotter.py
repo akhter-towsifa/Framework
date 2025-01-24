@@ -307,7 +307,6 @@ if __name__ == "__main__":
         new_hist = RebinHisto(old_hist, new_bins, hist_key, wantOverflow=args.wantOverflow,verbose=False)
         hists_to_plot_binned[hist_key] = new_hist if rebin_condition else old_hist
 
-
     plotter.plot(args.var, hists_to_plot_binned, args.outFile, want_data = args.wantData, custom=custom1)
     inFile_root.Close()
     print(args.outFile)
