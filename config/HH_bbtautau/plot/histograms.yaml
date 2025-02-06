@@ -45,7 +45,7 @@ tau1_pt:
       other: [40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200]
     other: [20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180,190, 200, 250]
   x_title: p_{T}(lep_{1}) (GeV)
-  y_title: "#frac{Events}{bin width} #left(#frac{1}{GeV}#right) "
+  y_title: "#frac{Events}{bin width} #left(#frac{1}{10 GeV}#right) "
   #y_title: Events
   use_log_y: False
   max_y_sf: 1.8
@@ -179,7 +179,7 @@ tau2_pt:
       other: [40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200]
     other: [30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180,190, 200, 250]
   x_title: p_{T}(lep_{2}) (GeV)
-  y_title: "#frac{Events}{bin width} #left(#frac{1}{GeV}#right) "
+  y_title: "#frac{Events}{bin width} #left(#frac{1}{10 GeV}#right) "
   #y_title: Events
   use_log_y: False
   max_y_sf: 1.8

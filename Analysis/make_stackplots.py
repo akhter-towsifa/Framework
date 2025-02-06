@@ -1,11 +1,11 @@
 import os
 
 era = "Run3_2022"
-ver = "tau_corr"
+ver = "tau_corr_1"
 indir = f"/eos/user/t/toakhter/HH_bbtautau_Run3/histograms/{ver}/{era}/merged/"
 plotdir = f"/eos/user/t/toakhter/HH_bbtautau_Run3/histograms/{ver}/{era}/plots/"
 
-varnames = ["PV_npvs", "tau1_pt", "tau2_pt", "tau1_mass", "tau2_mass"]#["lep1_pt", "lep1_eta", "lep2_pt", "lep2_eta", "bjet1_btagPNetB", "bjet2_btagPNetB"]
+varnames = ["PV_npvs", "tau1_pt", "tau2_pt"]#["lep1_pt", "lep1_eta", "lep2_pt", "lep2_eta", "bjet1_btagPNetB", "bjet2_btagPNetB"]
 channellist = ["eE", "eMu", "muMu", "eTau", "muTau", "tauTau"]
 
 for var in varnames:
