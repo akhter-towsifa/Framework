@@ -137,9 +137,6 @@ def createAnatuple(inFile, treeName, outDir, setup, sample_name, anaCache, snaps
         outfilesNames.append(outFileName)
         reports.append(dfw.df.Report())
         snaps.append(dfw.df.Snapshot(f"Events", outFileName, varToSave, snapshotOptions))
-        print(f"loop snaps {snaps}")
-        print(f"         {syst_name, source_name}")
-    print(f"snaps {snaps}")
     if snapshotOptions.fLazy == True:
         ROOT.RDF.RunGraphs(snaps)
     hist_time = ROOT.TH1D(f"time", f"time", 1, 0, 1)
@@ -202,9 +199,6 @@ if __name__ == "__main__":
     snapshotOptions.fMode="RECREATE"
     snapshotOptions.fCompressionAlgorithm = getattr(ROOT.ROOT, 'k' + args.compressionAlgo)
     snapshotOptions.fCompressionLevel = args.compressionLevel
-    print(f"""createAnatuple func {args.inFile}, {args.treeName}, {args.outDir}, {args.sample}, {anaCache},
-          {args.nEvents}, {args.evtIds}, {args.store_noncentral}, {args.compute_unc_variations},
-          {args.uncertainties}, {channels}""")
     createAnatuple(args.inFile, args.treeName, args.outDir, setup, args.sample, anaCache, snapshotOptions,
                    args.nEvents, args.evtIds, args.store_noncentral, args.compute_unc_variations,
                    args.uncertainties.split(","), anaTupleDef,channels)
