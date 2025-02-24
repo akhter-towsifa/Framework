@@ -131,7 +131,8 @@ class Setup:
 
         self.fs_dict = {}
 
-        self.hist_config_path = os.path.join(ana_path, 'config', 'plot','histograms.yaml')
+        #self.hist_config_path = os.path.join(ana_path, 'config', 'plot','histograms.yaml')
+        self.hist_config_path = os.path.join(self.analysis_config_area, 'plot', 'histograms.yaml')
         # self.hist_config_path = os.path.join(self.analysis_config_area, 'plot','histograms.yaml')
         self.hists_ = None
 
@@ -139,6 +140,8 @@ class Setup:
         self.backgrounds_ = None
 
         self.cmssw_env_ = None
+
+        self.signal_samples = [ key for key in self.samples if self.samples[key]['sampleType'] in self.global_params['signal_types'] ]
 
     def get_fs(self, fs_name):
         if fs_name not in self.fs_dict:
