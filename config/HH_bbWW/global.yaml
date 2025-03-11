@@ -12,6 +12,11 @@ corrections:
   - pu
   - JEC
   - JER
+  - btagShape
+
+tagger_name: "particleNet"
+
+bjet_preselection_branch : "Jet_sel"
 
 #This is for Analysis Selection
 channelSelection:
