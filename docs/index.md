@@ -10,7 +10,7 @@ Task workflow managed is done via [LAW](https://github.com/riga/law) (Luigi Anal
 
 1. Clone the repository:
   ```sh
-  git clone --recursive git@github.com:cms-flaf/Framework.git FLAF
+  git clone --recursive git@github.com:cms-flaf/HH_bbtautau.git HH_bbtautau
   ```
 
 1. Create a user customisation file `config/user_custom.yaml`. It should contain all user-specific modifications that you don't want to be committed to the central repository. Below is example of minimal content of the file (replace `USER_NAME` and `ANA_FOLDER` with your values):
