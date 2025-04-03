@@ -190,11 +190,11 @@ def defineTriggerWeightsErrors(dfBuilder):
     # dfBuilder.df = dfBuilder.df.Define(f"Err_MC_cross_ele", Err_MC_cross_ele)
     # dfBuilder.df = dfBuilder.df.Define(f"trigSF_cross_ele_err", """get_scale_factor_error(Eff_Data_etau, Eff_MC_etau, Err_Data_cross_ele, Err_MC_cross_ele,"trigSF_cross_ele_err")""")
 
-    dfBuilder.df = dfBuilder.df.Define("Eff_Data_etau_Up", "SelectCorrectEfficiency(tau2_decayMode, eff_data_tau2_Trg_etau_DM0Up, eff_data_tau2_Trg_etau_DM1Up, eff_data_tau2_Trg_etau_3ProngUp)")
+    # dfBuilder.df = dfBuilder.df.Define("Eff_Data_etau_Up", "SelectCorrectEfficiency(tau2_decayMode, eff_data_tau2_Trg_etau_DM0Up, eff_data_tau2_Trg_etau_DM1Up, eff_data_tau2_Trg_etau_3ProngUp)")
 
-    dfBuilder.df = dfBuilder.df.Define("Eff_MC_etau_Up", "SelectCorrectEfficiency(tau2_decayMode, eff_MC_tau2_Trg_etau_DM0Up, eff_MC_tau2_Trg_etau_DM1Up, eff_MC_tau2_Trg_etau_3ProngUp)")
+    # dfBuilder.df = dfBuilder.df.Define("Eff_MC_etau_Up", "SelectCorrectEfficiency(tau2_decayMode, eff_MC_tau2_Trg_etau_DM0Up, eff_MC_tau2_Trg_etau_DM1Up, eff_MC_tau2_Trg_etau_3ProngUp)")
 
-    dfBuilder.df = dfBuilder.df.Define("trigSF_err_dm_etau", """get_scale_factor_error(Eff_Data_etau, Eff_MC_etau, Eff_Data_etau_Up - Eff_Data_etau, Eff_MC_etau_Up - Eff_MC_etau,"trigSF_err_dm_etau")""")
+    # dfBuilder.df = dfBuilder.df.Define("trigSF_err_dm_etau", """get_scale_factor_error(Eff_Data_etau, Eff_MC_etau, Eff_Data_etau_Up - Eff_Data_etau, Eff_MC_etau_Up - Eff_MC_etau,"trigSF_err_dm_etau")""")
     Err_Data_ele = "Err_Data_SL_ele + Err_Data_cross_ele"
     Err_MC_ele   = "Err_MC_SL_ele   + Err_MC_cross_ele"
     if dfBuilder.period == 'Run2_2016' or dfBuilder.period == 'Run2_2016_HIPM':
