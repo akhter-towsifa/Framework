@@ -5,6 +5,7 @@ import math
 import shutil
 import time
 ROOT.EnableThreadSafety()
+ROOT.EnableImplicitMT()
 
 from FLAF.RunKit.run_tools import ps_call
 if __name__ == "__main__":
@@ -40,6 +41,8 @@ def createCentralQuantities(df_central, central_col_types, central_columns):
     map_creator = ROOT.analysis.MapCreator(*central_col_types)()
     df_central = map_creator.processCentral(ROOT.RDF.AsRNode(df_central), Utilities.ListToVector(central_columns), 1)
     #df_central = map_creator.getEventIdxFromShifted(ROOT.RDF.AsRNode(df_central))
+    print(f'df_central.Describe() {df_central.Describe()}')
+    print(f'df_central.Filter("HLT_ditau==1").Count().GetValue() {df_central.Filter("HLT_ditau==1").Count().GetValue()}')
     return df_central
 
 def SaveHists(histograms, out_file, categories_to_save):
@@ -288,11 +291,14 @@ if __name__ == "__main__":
             all_dataframes[key_central] = [new_dfWrapped_Central.df]
         central_histograms = GetHistogramDictFromDataframes(args.var, all_dataframes,  key_central , key_filter_dict, unc_cfg_dict['norm'],hist_cfg_dict, global_cfg_dict, args.furtherCut, False)
 
-
         # central quantities definition
         compute_variations = ( args.compute_unc_variations or args.compute_rel_weights ) and args.dataset != 'data'
         if compute_variations:
+            print(f'key_central {key_central} \n all_dataframes[key_central][0] {all_dataframes[key_central][0]}')# \n col_types_central {col_types_central} col_names_central {col_names_central}')
             all_dataframes[key_central][0] = createCentralQuantities(all_dataframes[key_central][0], col_types_central, col_names_central)
+            # print(f'all_dataframes[key_central][0].Count().GetValue() {all_dataframes[key_central][0].Count().GetValue()}')
+            # print(f'all_dataframes[key_central][0].GetColumnNames() {all_dataframes[key_central][0].GetColumnNames()}')
+            # print(f'all_dataframes[key_central][0].Describe() {all_dataframes[key_central][0].Filter("map_placeholder > 0").Describe()}')
             if all_dataframes[key_central][0].Filter("map_placeholder > 0").Count().GetValue() <= 0 : raise RuntimeError("no events passed map placeolder")
         # norm weight histograms
         if compute_rel_weights_not_data:
