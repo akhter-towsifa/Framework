@@ -185,6 +185,7 @@ load_flaf_env() {
   local target_os=$target_os_prefix$target_os_version
   [ -z "$FLAF_COMBINE_VERSION" ] && export FLAF_COMBINE_VERSION="v10.2.0"
   export FLAF_CMSSW_BASE="$ANALYSIS_SOFT_PATH/$flaf_cmssw_ver"
+  export CMSSW_BASE=$FLAF_CMSSW_BASE
   export FLAF_CMSSW_ARCH="${target_os_gt_prefix}${target_os_version}_amd64_gcc12"
   install_cmssw "$env_file" $node_os $target_os $FLAF_CMSSW_ARCH $flaf_cmssw_ver $FLAF_COMBINE_VERSION
 
