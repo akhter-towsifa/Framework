@@ -7,15 +7,17 @@ import tempfile
 
 from FLAF.RunKit.run_tools import natural_sort
 from FLAF.RunKit.crabLaw import update_kinit
-from FLAF.RunKit.law_wlcg import WLCGFileTarget
+from FLAF.RunKit.law_wlcg import WLCGFileTarget, WLCGDirectoryTarget
 from FLAF.Common.Setup import Setup
 
 law.contrib.load("htcondor")
 
+
 def copy_param(ref_param, new_default):
-  param = copy.deepcopy(ref_param)
-  param._default = new_default
-  return param
+    param = copy.deepcopy(ref_param)
+    param._default = new_default
+    return param
+
 
 def get_param_value(cls, param_name):
     try:
@@ -24,25 +26,38 @@ def get_param_value(cls, param_name):
     except:
         return None
 
+
 # def get_param_value(cls, param_name):
 #     param = getattr(cls, param_name)
 #     return param.task_value(cls.__name__, param_name)
+
 
 class Task(law.Task):
     """
     Base task that we use to force a version parameter on all inheriting tasks, and that provides
     some convenience methods to create local file and directory targets at the default data path.
     """
+
     version = luigi.Parameter()
-    prefer_params_cli = [ 'version' ]
+    prefer_params_cli = ["version"]
     period = luigi.Parameter()
-    customisations =luigi.Parameter(default="")
-    test = luigi.BoolParameter(default=False)
-    sample = luigi.Parameter(default="")
+    customisations = luigi.Parameter(default="")
+    test = luigi.IntParameter(default=-1)
+    dataset = luigi.Parameter(default="")
+    process = luigi.Parameter(default="")
 
     def __init__(self, *args, **kwargs):
         super(Task, self).__init__(*args, **kwargs)
-        self.setup = Setup.getGlobal(os.getenv("ANALYSIS_PATH"), self.period, self.sample, self.customisations)
+        self.setup = Setup.getGlobal(
+            os.getenv("ANALYSIS_PATH"),
+            self.period,
+            custom_process_selection=self.process if len(self.process) > 0 else None,
+            custom_dataset_selection=self.dataset if len(self.dataset) > 0 else None,
+            customisations=self.customisations,
+        )
+        self._dataset_id_name_list = None
+        self._dataset_id_name_dict = None
+        self._dataset_name_id_dict = None
 
     def store_parts(self):
         return (self.__class__.__name__, self.version, self.period)
@@ -52,8 +67,8 @@ class Task(law.Task):
         return self.setup.cmssw_env
 
     @property
-    def samples(self):
-        return self.setup.samples
+    def datasets(self):
+        return self.setup.datasets
 
     @property
     def global_params(self):
@@ -61,31 +76,35 @@ class Task(law.Task):
 
     @property
     def fs_nanoAOD(self):
-        return self.setup.get_fs('nanoAOD')
+        return self.setup.get_fs("nanoAOD")
 
     @property
     def fs_anaCache(self):
-        return self.setup.get_fs('anaCache')
+        return self.setup.get_fs("anaCache")
 
     @property
     def fs_anaTuple(self):
-        return self.setup.get_fs('anaTuple')
+        return self.setup.get_fs("anaTuple")
+
+    @property
+    def fs_HistTuple(self):
+        return self.setup.get_fs("HistTuple")
 
     @property
     def fs_anaCacheTuple(self):
-        return self.setup.get_fs('anaCacheTuple')
+        return self.setup.get_fs("anaCacheTuple")
 
     @property
     def fs_nnCacheTuple(self):
-        return self.setup.get_fs('nnCacheTuple')
+        return self.setup.get_fs("nnCacheTuple")
 
     @property
     def fs_histograms(self):
-        return self.setup.get_fs('histograms')
+        return self.setup.get_fs("histograms")
 
     @property
     def fs_plots(self):
-        return self.setup.get_fs('plots')
+        return self.setup.get_fs("plots")
 
     def ana_path(self):
         return os.getenv("ANALYSIS_PATH")
@@ -108,20 +127,51 @@ class Task(law.Task):
             return law.LocalFileTarget(path)
         return WLCGFileTarget(path, fs)
 
+    def remote_dir_target(self, *path, fs=None):
+        fs = fs or self.setup.fs_default
+        path = os.path.join(*path)
+        if type(fs) == str:
+            path = os.path.join(fs, path)
+            return law.LocalDirectoryTarget(path)
+        return WLCGDirectoryTarget(path, fs)
+
     def law_job_home(self):
-        if 'LAW_JOB_HOME' in os.environ:
-            return os.environ['LAW_JOB_HOME'], False
+        if "LAW_JOB_HOME" in os.environ:
+            return os.environ["LAW_JOB_HOME"], False
         os.makedirs(self.local_path(), exist_ok=True)
         return tempfile.mkdtemp(dir=self.local_path()), True
 
     def poll_callback(self, poll_data):
         update_kinit(verbose=0)
 
-    def iter_samples(self):
-        for sample_id, sample_name in enumerate(natural_sort(self.samples.keys())):
-            yield sample_id, sample_name
+    def _create_dataset_mappings(self):
+        if self._dataset_id_name_list is None:
+            self._dataset_id_name_list = []
+            self._dataset_id_name_dict = {}
+            self._dataset_name_id_dict = {}
+            for dataset_id, dataset_name in enumerate(
+                natural_sort(self.datasets.keys())
+            ):
+                self._dataset_id_name_list.append((dataset_id, dataset_name))
+                self._dataset_id_name_dict[dataset_id] = dataset_name
+                self._dataset_name_id_dict[dataset_name] = dataset_id
 
+    def iter_datasets(self):
+        self._create_dataset_mappings()
+        for dataset_id, dataset_name in self._dataset_id_name_list:
+            yield dataset_id, dataset_name
 
+    def get_dataset_name(self, dataset_id):
+        self._create_dataset_mappings()
+        if dataset_id not in self._dataset_id_name_dict:
+            raise KeyError(f"dataset id '{dataset_id}' not found")
+        return self._dataset_id_name_dict[dataset_id]
+
+    def get_dataset_id(self, dataset_name):
+        self._create_dataset_mappings()
+        if dataset_name not in self._dataset_name_id_dict:
+            raise KeyError(f"dataset name '{dataset_name}' not found")
+        return self._dataset_name_id_dict[dataset_name]
 
 
 class HTCondorWorkflow(law.htcondor.HTCondorWorkflow):
@@ -133,12 +183,19 @@ class HTCondorWorkflow(law.htcondor.HTCondorWorkflow):
     configuration is required.
     """
 
-    max_runtime = law.DurationParameter(default=12.0, unit="h", significant=False,
-                                        description="maximum runtime, default unit is hours")
+    max_runtime = law.DurationParameter(
+        default=12.0,
+        unit="h",
+        significant=False,
+        description="maximum runtime, default unit is hours",
+    )
     n_cpus = luigi.IntParameter(default=1, description="number of cpus")
     poll_interval = copy_param(law.htcondor.HTCondorWorkflow.poll_interval, 2)
-    transfer_logs = luigi.BoolParameter(default=True, significant=False,
-                                        description="transfer job logs to the output directory")
+    transfer_logs = luigi.BoolParameter(
+        default=True,
+        significant=False,
+        description="transfer job logs to the output directory",
+    )
 
     def htcondor_check_job_completeness(self):
         return False
@@ -157,9 +214,13 @@ class HTCondorWorkflow(law.htcondor.HTCondorWorkflow):
         # render_variables are rendered into all files sent with a job
         config.render_variables["analysis_path"] = ana_path
         # force to run on CC7, https://batchdocs.web.cern.ch/local/submit.html
-        config.custom_content.append(("requirements", 'TARGET.OpSysAndVer =?= "AlmaLinux9"'))
+        config.custom_content.append(
+            ("requirements", 'TARGET.OpSysAndVer =?= "AlmaLinux9"')
+        )
 
         # maximum runtime
-        config.custom_content.append(("+MaxRuntime", int(math.floor(self.max_runtime * 3600)) - 1))
+        config.custom_content.append(
+            ("+MaxRuntime", int(math.floor(self.max_runtime * 3600)) - 1)
+        )
         config.custom_content.append(("RequestCpus", self.n_cpus))
         return config
